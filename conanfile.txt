@@ -1,0 +1,8 @@
+[requires]
+glad/0.1.35
+
+[generators]
+premake
+
+[options]
+*:shared=False

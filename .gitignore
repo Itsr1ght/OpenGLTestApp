@@ -34,3 +34,10 @@
 # Folders
 bin/
 build/
+
+#conan files
+conaninfo.txt
+conanbuildinfo.txt
+graph_info.json
+conan.lock
+conanbuildinfo.premake.lua
