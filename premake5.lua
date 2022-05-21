@@ -1,8 +1,12 @@
+include("conanbuildinfo.premake.lua")
+
 workspace ("OpenGLTestApp")
     language "C++"
     location "build"
     warnings "Extra"
     cppdialect "C++17"
+    -- conan setup
+    conan_basic_setup()
     -- platforms {"Static", "Shared"}
     configurations {"Debug", "Release"}
 
@@ -23,5 +27,6 @@ project ("OpenGLTestApp")
     files {"src/main.cpp"}
     includedirs {"include"}
     -- links {"library"}
+    linkoptions { conan_exelinkflags }
 
 
