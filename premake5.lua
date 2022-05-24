@@ -5,9 +5,9 @@ workspace ("OpenGLTestApp")
     location "build"
     warnings "Extra"
     cppdialect "C++17"
+    toolset("clang")
     -- conan setup
     conan_basic_setup()
-    -- platforms {"Static", "Shared"}
     configurations {"Debug", "Release"}
 
     filter {"configurations:Debug"}
@@ -24,9 +24,17 @@ workspace ("OpenGLTestApp")
 project ("OpenGLTestApp")
     targetdir "bin"
     kind "ConsoleApp"
-    files {"src/main.cpp"}
-    includedirs {"include"}
-    -- links {"library"}
-    linkoptions { conan_exelinkflags }
-
+    files {
+        "src/**.cpp"
+    }
+    includedirs {
+        "include"
+    }
+    linkoptions { 
+        conan_exelinkflags
+    }
+    filter { "system:windows" }
+		links { "OpenGL32" }
+	filter { "system:linux" }
+		links { "GL" }
 

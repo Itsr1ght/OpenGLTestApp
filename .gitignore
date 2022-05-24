@@ -41,3 +41,7 @@ conanbuildinfo.txt
 graph_info.json
 conan.lock
 conanbuildinfo.premake.lua
+
+#visual studio stuff
+.vscode
+.vs
