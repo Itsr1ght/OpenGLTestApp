@@ -1,29 +1,56 @@
 #include <glad/glad.h>
-#include <iostream>
 #include <GLFW/glfw3.h>
+#include <iostream>
 
 
-int main(){
 
-    GLFWwindow* window = glfwCreateWindow( 1080, 720, "Hello OpenGL", NULL, NULL);
-    glfwWindowHint(GLFW_VERSION_MAJOR, 3);
-    glfwWindowHint(GLFW_VERSION_MINOR, 3);
+int main()
+{
+    GLFWwindow* window;
+
+    /* Initialize the library */
+    if (!glfwInit())
+        return -1;
+
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+    
 
+    /* Create a windowed mode window and its OpenGL context */
+    window = glfwCreateWindow(640, 480, "Hello OpenGL", NULL, NULL);
+    if (!window)
+    {
+        glfwTerminate();
+        return -1;
+    }
+
+    /* Make the window's context current */
     glfwMakeContextCurrent(window);
 
-    if(window==NULL)
+    if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
     {
-        std::cout<<window<<std::endl;
-        std::cout<<"ERROR : Window Not Initialise"<<std::endl;
+        std::cout << "Failed to initialize GLAD" << std::endl;
+        return -1;
     }
 
-    while(glfwWindowShouldClose(window))
+    /* Loop until the user closes the window */
+    while (!glfwWindowShouldClose(window))
     {
+        /* Render here */
+        glClear(GL_COLOR_BUFFER_BIT);
+
+        /* Change Color */
+        glClearColor(0.3,0.3,0.3,1.0);
+
+        /* Swap front and back buffers */
         glfwSwapBuffers(window);
-        glfwPollEvents(); 
+
+        /* Poll for and process events */
+        glfwPollEvents();
     }
 
+    glfwDestroyWindow(window);
     glfwTerminate();
     return 0;
 }
