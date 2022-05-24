@@ -4,7 +4,7 @@ REM generate the library from network using conan
 conan install . --build missing
 
 REM To Generate Windows Solution
-call vendor\premake\premake5.exe vs2019
+premake5 vs2019
 
 REM call Solution File
 cd build

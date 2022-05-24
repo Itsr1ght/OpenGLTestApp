@@ -3,7 +3,6 @@ include("conanbuildinfo.premake.lua")
 workspace ("OpenGLTestApp")
     language "C++"
     location "build"
-    warnings "Extra"
     cppdialect "C++11"
     toolset("clang")
     -- conan setup
@@ -17,7 +16,8 @@ project ("OpenGLTestApp")
     targetdir "bin"
     kind "ConsoleApp"
     files {
-        "src/**.cpp"
+        "**.cpp",
+        "**.h"
     }
     includedirs {
         "include"
