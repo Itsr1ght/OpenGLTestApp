@@ -2,7 +2,6 @@ include("conanbuildinfo.premake.lua")
 
 workspace ("OpenGLTestApp")
     language "C++"
-    location "build"
     cppdialect "C++11"
     toolset("clang")
     -- conan setup
