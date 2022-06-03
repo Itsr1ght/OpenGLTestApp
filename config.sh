@@ -3,8 +3,3 @@ conan install . --build missing
 
 #To Generate MakeFiles 
 premake5 gmake
-
-#go to the build directory 
-cd build
-make
-
