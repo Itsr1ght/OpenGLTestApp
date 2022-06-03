@@ -1,4 +1,4 @@
-include("conanbuildinfo.premake.lua")
+include("vendor/conanbuildinfo.premake.lua")
 
 workspace ("OpenGLTestApp")
     language "C++"
