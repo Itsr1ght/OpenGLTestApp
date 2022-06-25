@@ -12,9 +12,13 @@ pip install conan
 ```
 or download from their website <a href="https://conan.io/downloads">conan</a>
 
-and call ``` config.bat ```
-for build the basic solution for windows
+also download the premake binary from the <a href="https://premake.github.io/download">premake website</a>
+add it to the project directory or add it as a environment variable in windows
 
+and call ``` config.bat ```
+for generate the basic solution for windows <div>
+and call ``` build.bat ```
+for build the application (if you install the visual studio)
 
 ### <b>Linux</b>
 
@@ -27,4 +31,6 @@ sudo pacman -S premake5
 yay -S conan
 ```
 and call ``` config.sh ```
-for building MakeFiles for the program
+for generate MakeFiles for the program <div>
+and call ``` build.bat ```
+for build the application
