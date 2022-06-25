@@ -1,35 +1,43 @@
 #define STB_IMAGE_IMPLEMENTATION
 
 #include <glad/glad.h>
-#include <GLFW/glfw3.h>
 #include <iostream>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 #include "stb_image.h"
+#include "Window.h"
 #include "Shader.h"
+
+
+/* Camera in 3d space */
 
 
 int main()
 {
-    // ------ values ------- //
-    GLFWwindow* window;
 
+    _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+
+  
     //vertex buffer object {Buffer is group of Data}
-    unsigned int VBO;
+    unsigned int VBO = 0;
 
     //vertex array object
-    unsigned int VAO;
+    unsigned int VAO = 0;
 
     //element Buffer Object
-    unsigned int EBO;
+    unsigned int EBO = 0;
 
     //Texture id 
     unsigned int texture;
 
     //For getting the texture
     int width, height, nrChannels;
-    unsigned char* data;
+    unsigned char* data = nullptr;
 
     //Texture Border Color
     float borderColor[] = { 1.0f, 1.0f, 0.0f, 1.0f };
+
 
 
     //vertices for triangle
@@ -45,34 +53,10 @@ int main()
         1, 2, 3    // second triangle
     };
 
+    Window window = Window::Create({720 , 480, "Hello OpenGL"});
 
-    /* Initialize the library */
-    if (!glfwInit())
-        return -1;
-
-
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-    
-
-    /* Create a windowed mode window and its OpenGL context */
-    window = glfwCreateWindow(640, 480, "Hello OpenGL", NULL, NULL);
-    if (!window)
-    {
-        glfwTerminate();
-        return -1;
-    }
-
-    /* Make the window's context current */
-    glfwMakeContextCurrent(window);
-
-    if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
-    {
-        std::cout << "Failed to initialize GLAD" << std::endl;
-        return -1;
-    }
-
+    glEnable(GL_DEPTH_TEST);
+   
     //For generating buffer
     glGenBuffers(1, &VBO);
     //Bind the generated buffer to array buffer
@@ -80,9 +64,11 @@ int main()
     //Convert the user data to currently bounded buffer
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
+
+
     /* SHADER STUFF */
 
-    Shader our_shader("../asset/shader/vertex.shader","../asset/shader/fragment.shader");
+    Shader our_shader("./asset/shader/vertex.shader","./asset/shader/fragment.shader");
 
 
     /*Texture Stuff*/
@@ -95,7 +81,7 @@ int main()
     // set texture filtering parameters
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    data = stbi_load("../asset/texture/container.jpg", &width, &height, &nrChannels, 0);
+    data = stbi_load("./asset/texture/container.jpg", &width, &height, &nrChannels, 0);
 
     if (data)
     {
@@ -133,13 +119,33 @@ int main()
     // 2. use our shader program when we want to render an object   
     our_shader.use();
 
+
+    /* 3d coordiante math  */
+    glm::mat4 model = glm::mat4(1.0f);
+    model = glm::rotate(model, glm::radians(-55.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+    our_shader.setMatrix4("model", model);
+
+
+    glm::mat4 view = glm::mat4(1.0f);
+    // note that we're translating the scene in the reverse direction of where we want to move
+    view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
+    our_shader.setMatrix4("view", view);
+
+    glm::mat4 projection;
+    projection = glm::perspective(glm::radians(45.0f), 800.0f / 600.0f, 0.1f, 100.0f);
+    our_shader.setMatrix4("projection", projection);
+
+
+
+
+
     /* Loop until the user closes the window */
-    while (!glfwWindowShouldClose(window))
+    while (!window.isRunning())
     {
         /* Change Color */
         glClearColor(0.3, 0.3, 0.3, 1.0);
         /* Render here */
-        glClear(GL_COLOR_BUFFER_BIT);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glBindVertexArray(VAO);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
         glBindTexture(GL_TEXTURE_2D, texture);
@@ -147,17 +153,10 @@ int main()
         glBindVertexArray(VAO);
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
         glBindVertexArray(0);
-
-        /* Swap front and back buffers */
-        glfwSwapBuffers(window);
-
-        /* Poll for and process events */
-        glfwPollEvents();
+        window.ClearScreen();
     }
     glDeleteVertexArrays(1, &VAO);
     glDeleteBuffers(1, &VBO);
     glDeleteBuffers(1, &EBO);
-    glfwDestroyWindow(window);
-    glfwTerminate();
     return 0;
 }

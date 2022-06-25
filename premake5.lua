@@ -3,7 +3,6 @@ include("vendor/conanbuildinfo.premake.lua")
 workspace ("OpenGLTestApp")
     language "C++"
     cppdialect "C++11"
-    toolset("clang")
     -- conan setup
     conan_basic_setup()
     configurations {"Debug", "Release"}
