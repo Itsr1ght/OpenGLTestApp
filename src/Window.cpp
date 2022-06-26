@@ -2,7 +2,7 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <iostream>
-#include <exception>
+#include <string>
 
 
 Window *instance = nullptr;
@@ -40,17 +40,6 @@ Window::Window(WindowProps props)
 
 }
 
-Window::~Window()
-{
-	if (window) {
-		glfwDestroyWindow(window);
-		glfwTerminate();
-	}
-
-	if (instance)
-		free(instance);
-}
-
 Window Window::Create(WindowProps props)
 {
 	if (!instance)
@@ -66,7 +55,23 @@ bool Window::isRunning()
 void Window::ClearScreen()
 {
 	glfwSwapBuffers(window);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glfwPollEvents();
+	glViewport(0, 0, props.width, props.height);
+}
+
+void Window::Destroy()
+{
+	if (window) {
+		glfwDestroyWindow(window);
+		glfwTerminate();
+	}
+	delete instance;
+}
+
+void Window::setVSync(bool vsync=true)
+{
+	glfwSwapInterval(vsync);
 }
 
 int Window::getWidth()
@@ -79,7 +84,7 @@ int Window::getHeight()
 	return this->props.height;
 }
 
-std::string Window::getName()
+std::string Window::getTitle()
 {
 	return this->props.name;
 }

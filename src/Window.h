@@ -11,13 +11,14 @@ struct WindowProps
 class Window
 {
 public:
-	~Window();
 	static Window Create(WindowProps props);
 	bool isRunning();
 	void ClearScreen();
+	void Destroy();
+	void setVSync(bool vsync);
 	int getWidth();
 	int getHeight();
-	std::string getName();
+	std::string getTitle();
 
 private:
 	WindowProps props = { 720 , 460, "Hello OpenGL" };
