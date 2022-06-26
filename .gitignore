@@ -50,5 +50,6 @@ conanbuildinfo.premake.lua
 #visual studio stuff
 .vscode
 .vs
-OpenGLTestApp.sln
-OpenGLTestApp.vcxproj
+*.sln
+*.vcxproj
+*.vcxproj.user
