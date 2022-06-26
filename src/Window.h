@@ -16,6 +16,7 @@ public:
 	void ClearScreen();
 	void Destroy();
 	void setVSync(bool vsync);
+	double getTime();
 	int getWidth();
 	int getHeight();
 	std::string getTitle();

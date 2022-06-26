@@ -1,6 +1,7 @@
 #include "Window.h"
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
+#include <glm/glm.hpp>
 #include <iostream>
 #include <string>
 
@@ -72,6 +73,11 @@ void Window::Destroy()
 void Window::setVSync(bool vsync=true)
 {
 	glfwSwapInterval(vsync);
+}
+
+double Window::getTime()
+{
+	return glfwGetTime();
 }
 
 int Window::getWidth()
