@@ -52,4 +52,4 @@ conanbuildinfo.premake.lua
 .vs
 *.sln
 *.vcxproj
-*.vcxproj.user
+OpenGLTestApp.vcxproj.user
