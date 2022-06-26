@@ -6,7 +6,7 @@ class VAO
 {
 public:
 	static VAO Create();
-	void LinkVBO(VBO& vbo, unsigned int layout, unsigned int size);
+	void LinkVBO(VBO& vbo, unsigned int layout, unsigned int size, const void* pointer);
 	void bind();
 	void unbind();
 	void Destroy();

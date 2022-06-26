@@ -17,12 +17,6 @@ int main()
 
     _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 
-  
-
-    //vertex array object
-    unsigned int VAO = 0;
-
-
     //Texture id 
     unsigned int texture;
 
@@ -82,20 +76,12 @@ int main()
     }
     stbi_image_free(data);
 
-    ////////// VAO //////////////
-    //For generating array object
-    glGenVertexArrays(1, &VAO);
-    //For Binding Array Object
-    glBindVertexArray(VAO);
-    // 3. then set our vertex attributes pointers
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
-    glEnableVertexAttribArray(0);
-    // color attribute
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
-    glEnableVertexAttribArray(1);
-    // texture attribute
-    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
-    glEnableVertexAttribArray(2);
+    VAO vao = VAO::Create();
+
+    vao.bind();
+    vao.LinkVBO(vbo, 0, 3, (void*)(0));
+    vao.LinkVBO(vbo, 1, 3, (void*)(3 * sizeof(float)));
+    vao.LinkVBO(vbo, 2, 2, (void*)(6 * sizeof(float)));
 
     std::cout << glGetString(GL_VERSION) << std::endl;
     our_shader.use();
@@ -107,21 +93,18 @@ int main()
         
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        glBindVertexArray(VAO);
-        
+        vao.bind();
         ebo.bind();
 
         glBindTexture(GL_TEXTURE_2D, texture);
         
-        our_shader.use();        
-        
-        glBindVertexArray(VAO);
+        our_shader.use();
 
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
         window.ClearScreen();
     }
-    glDeleteVertexArrays(1, &VAO);
+    vao.Destroy();
     vbo.Destroy();
     ebo.Destroy();
     window.Destroy();

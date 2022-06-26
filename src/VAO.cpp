@@ -10,10 +10,11 @@ VAO VAO::Create()
     return *instance;
 }
 
-void VAO::LinkVBO(VBO& vbo, unsigned int layout, unsigned int size)
+void VAO::LinkVBO(VBO& vbo, unsigned int layout, unsigned int size, const void* pointer)
 {
+
     vbo.bind();
-    glVertexAttribPointer(layout, size, GL_FLOAT, GL_FALSE, 0, nullptr);
+    glVertexAttribPointer(layout, size, GL_FLOAT, GL_FALSE, 8 * sizeof(float), pointer);
     glEnableVertexAttribArray(layout);
     vbo.unbind();
 }

@@ -33,6 +33,6 @@ VBO::VBO(float *vertices, float size)
     //Bind the generated buffer to array buffer
     glBindBuffer(GL_ARRAY_BUFFER, ID);
     //Convert the user data to currently bounded buffer
-    glBufferData(GL_ARRAY_BUFFER, size, vertices, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, (GLsizeiptr)size, vertices, GL_STATIC_DRAW);
 }
 
