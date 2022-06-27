@@ -1,12 +1,14 @@
 #include "Shader.h"
+#include <glad/glad.h>
 #include <glm/gtc/type_ptr.hpp>
+#include <vector>
 #include <fstream>
 #include <sstream>
 #include <iostream>
-#include <glad/glad.h>
 
+static Shader *instance;
 
-Shader::Shader(const char* vertex_path, const char* frag_path){
+Shader::Shader(std::string* vertex_path, std::string* frag_path){
 
     std::string vertexCode;
     std::string fragmentCode;
@@ -17,19 +19,8 @@ Shader::Shader(const char* vertex_path, const char* frag_path){
     fShaderFile.exceptions(std::ifstream::failbit | std::ifstream::badbit);
     try
     {
-        // open files
-        vShaderFile.open(vertex_path);
-        fShaderFile.open(frag_path);
-        std::stringstream vShaderStream, fShaderStream;
-        // read file's buffer contents into streams
-        vShaderStream << vShaderFile.rdbuf();
-        fShaderStream << fShaderFile.rdbuf();
-        // close file handlers
-        vShaderFile.close();
-        fShaderFile.close();
-        // convert stream into string
-        vertexCode = vShaderStream.str();
-        fragmentCode = fShaderStream.str();
+        vertexCode = fetchShader(*vertex_path);
+        fragmentCode = fetchShader(*frag_path);
     }
     catch (std::ifstream::failure e)
     {
@@ -87,6 +78,11 @@ Shader::~Shader()
         free(infoLog);
 }
 
+Shader Shader::Create(std::string* vertex_path, std::string* frag_path)
+{
+    return *instance;
+}
+
 void Shader::use(){
     glUseProgram(ID);
 }
@@ -106,5 +102,45 @@ void Shader::setFloat(const std::string& name, float value) const{
 void Shader::setMatrix4(const std::string& name, glm::mat4 matrix4) const
 {
     glUniformMatrix4fv(glGetUniformLocation(ID, name.c_str()), 1, GL_FALSE, glm::value_ptr(matrix4));
+}
+
+void Shader::Destroy()
+{
+    delete instance;
+}
+
+std::string Shader::fetchShader(std::string path)
+{
+    std::fstream stream;
+    std::string line;
+    std::vector<std::string> content;
+
+    stream.open(path);
+    if (stream.is_open())
+    {
+        while (getline(stream, line))
+        {
+            content.push_back(line);
+        }
+
+        line = "";
+
+        for (std::string s : content)
+        {
+            line += s + '\n';
+        }
+        stream.close();
+    }
+    return line;
+}
+
+bool Shader::CompileShader()
+{
+    return false;
+}
+
+bool Shader::LinkShader()
+{
+    return false;
 }
 
