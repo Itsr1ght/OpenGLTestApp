@@ -60,8 +60,10 @@ int main()
 
     EBO ebo = EBO::Create(indices, sizeof(indices));
 
+    std::string vertex_loc = "./asset/shader/vertex.shader";
+    std::string frag_loc = "./asset/shader/fragment.shader";
 
-    Shader our_shader("./asset/shader/vertex.shader", "./asset/shader/fragment.shader");
+    Shader our_shader = Shader::Create(&vertex_loc, &frag_loc);
 
     /*Texture Stuff*/
 
@@ -131,6 +133,7 @@ int main()
     vao.Destroy();
     vbo.Destroy();
     ebo.Destroy();
+    our_shader.Destroy();
     window.Destroy();
     return 0;
 }
